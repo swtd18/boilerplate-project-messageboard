@@ -6,7 +6,7 @@ const RaplyModel = require("../models").Reply;
 
 
 module.exports = function (app) {
-  
+
   app.route('/api/threads/:board').post(function (req,res) {
     const {text, delete_password}=req.body;
     let board=req.body.board
@@ -31,12 +31,13 @@ module.exports = function (app) {
           }
           else {
             res.json(newThread);
+
           }
         })
       }
       else {
-        BoardModel.threads.push(newThread);
-        newBoard.save((err,data)=> {
+        data.threads.push(newThread);
+        data.save().then(data=> {
           if(!data) {
             console.log("error saving data");
             res.send("there was error in saving data");
@@ -49,8 +50,7 @@ module.exports = function (app) {
     })  
 
   }).get((req,res)=> {
-    const board=req.params.body;
-    console.log(board);
+    const board=req.params.board;
     BoardModel.findOne({name:board}).then(data=> {
      if(!data) {
        console.log("this thread does not exist"); 
@@ -62,6 +62,7 @@ module.exports = function (app) {
         text,
         created_ond,
         bumped_on,
+
         delete_password,
         replies
         }=thread;
