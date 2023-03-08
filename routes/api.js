@@ -223,6 +223,7 @@ module.exports = function (app) {
             let replyToDelete=thread.replies.id(reply_id);
             if(replyToDelete.delete_password===delete_password) {
               //replyToDelete.deleteOne();
+              replyToDelete.text='[deleted]';
               data.save().then((data)=>{
                 if(!data) {
                   console.log("error updating in database");
