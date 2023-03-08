@@ -1,4 +1,7 @@
 'use strict';
+
+const { then } = require("../db-connection");
+
 const BoardModel = require("../models").Board;
 const ThreadModel = require("../models").Thread;
 const ReplyModel = require("../models").Reply;
@@ -6,6 +9,8 @@ const ReplyModel = require("../models").Reply;
 
 
 module.exports = function (app) {
+
+ 
 
   app.route('/api/threads/:board').post(function (req,res) {
     const {text, delete_password}=req.body;
@@ -180,7 +185,28 @@ module.exports = function (app) {
           }
           else {
             const thread=data.threads.id(req.query.thread_id);
-            res.json(thread);
+            const repliesToReturn=thread.replies.map(reply=> {
+              const {
+               _id,
+               text,
+               created_on,
+               bumped_on,
+               }=reply;
+               return {
+                 _id,
+                 text,
+                 created_on,
+                 bumped_on,
+               };
+              })
+              const threadToReturn= {
+                _id:req.query.thread_id,
+                text:thread.text,
+                created_on:thread.created_on,
+                bumped_on:thread.bumped_on,
+                replies:repliesToReturn
+              };
+              res.json(threadToReturn);
              }
          })
       }).put((req,res)=>{
@@ -239,4 +265,10 @@ module.exports = function (app) {
           }
         });
       })
+
+      app.route('/api/replies/:board/thread_id=:thread_id').get((req,res)=>{
+
+        console.log("hello");
+    
+     });
 }

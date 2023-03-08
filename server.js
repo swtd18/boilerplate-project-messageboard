@@ -45,7 +45,6 @@ app.route('/b/:board/')
   });
 app.route('/b/:board/:threadid')
   .get(function (req, res) {
-    res.json()
     res.sendFile(process.cwd() + '/views/thread.html');
   });
 
