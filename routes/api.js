@@ -96,7 +96,7 @@ module.exports = function (app) {
       else {
         let threadToDelete=data.threads.id(thread_id);
         if(threadToDelete.delete_password===delete_password) {
-          threadToDelete.deleteOne();
+          //threadToDelete.deleteOne();
           data.save().then((data)=>{
             if(!data) {
               console.log("error updating in database");
@@ -222,8 +222,7 @@ module.exports = function (app) {
             let thread=data.threads.id(thread_id);
             let replyToDelete=thread.replies.id(reply_id);
             if(replyToDelete.delete_password===delete_password) {
-              replyToDelete.text='deleted';
-              replyToDelete.deleteOne();
+              //replyToDelete.deleteOne();
               data.save().then((data)=>{
                 if(!data) {
                   console.log("error updating in database");
