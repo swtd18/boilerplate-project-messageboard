@@ -76,26 +76,25 @@ module.exports = function (app) {
        const threadsToReturn=threads.map(thread=> {
         const lr=thread.replies.length;
         if(lr>3) {
-          const temp=thread.replies.slice(l-3,l);
-          var repliesToReturn=temp.map(reply=>{
-            const {
-              _id,
-              text,
-              created_on,
-              bumped_on}=reply;
-              return {
-                id,
-                text,
-                created_on,
-                bumped_on
-              }
-            });
-          }
+          var repliesToReturn=thread.replies.slice(l-3,l);
+        }
         else {
           var repliesToReturn=thread.replies;
         }
-       repliesToReturn.reverse();
-       console.log(repliesToReturn);
+        replies=repliesToReturn.map(reply=>{
+          const {
+            _id,
+            text,
+            created_on,
+            bumped_on}=reply;
+            return {
+              _id,
+              text,
+              created_on,
+              bumped_on
+            }
+          });
+       replies.reverse();
        const {
         _id,
         text,
@@ -107,12 +106,12 @@ module.exports = function (app) {
           text,
           created_on,
           bumped_on,
-          repliesToReturn,
-          replyCount:repliesToReturn.length,
+          replies,
+          //replyCount:repliesToReturn.length,
         };
        })
-       res.json(threads);
-       console.log(threadsToReturn[0].repliesToReturn);
+       res.json(threadsToReturn);
+       console.log(threadsToReturn);
      }
     })
     
