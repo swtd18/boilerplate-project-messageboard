@@ -1,5 +1,6 @@
 'use strict';
 
+const { referrerPolicy } = require("helmet");
 const { then } = require("../db-connection");
 
 const BoardModel = require("../models").Board;
@@ -64,20 +65,37 @@ module.exports = function (app) {
        console.log("this thread does not exist"); 
      }
      else {
-      if(data.threads.lenght>10) {
-        var threads=data.threads.slice(0,10);
-        
+      const l=data.threads.length;
+      if(l>10) {
+        var threads=data.threads.slice(l-10,l);
       }
       else {
         var threads=data.threads;
       }
+      threads.reverse();
        const threadsToReturn=threads.map(thread=> {
-        if(thread.replies.length>3) {
-          var repliesToReturn=thread.replies.slice(1,3);
-        }
+        const lr=thread.replies.length;
+        if(lr>3) {
+          const temp=thread.replies.slice(l-3,l);
+          var repliesToReturn=temp.map(reply=>{
+            const {
+              _id,
+              text,
+              created_on,
+              bumped_on}=reply;
+              return {
+                id,
+                text,
+                created_on,
+                bumped_on
+              }
+            });
+          }
         else {
           var repliesToReturn=thread.replies;
         }
+       repliesToReturn.reverse();
+       console.log(repliesToReturn);
        const {
         _id,
         text,
@@ -93,7 +111,8 @@ module.exports = function (app) {
           replyCount:repliesToReturn.length,
         };
        })
-       res.json(threadsToReturn);
+       res.json(threads);
+       console.log(threadsToReturn[0].repliesToReturn);
      }
     })
     
