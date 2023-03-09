@@ -76,12 +76,12 @@ module.exports = function (app) {
        const threadsToReturn=threads.map(thread=> {
         const lr=thread.replies.length;
         if(lr>3) {
-          var repliesToReturn=thread.replies.slice(l-3,l);
+          var replies=thread.replies.slice(l-3,l);
         }
         else {
-          var repliesToReturn=thread.replies;
+          var replies=thread.replies;
         }
-        replies=repliesToReturn.map(reply=>{
+        replies=replies.map(reply=>{
           const {
             _id,
             text,
@@ -107,11 +107,10 @@ module.exports = function (app) {
           created_on,
           bumped_on,
           replies,
-          //replyCount:repliesToReturn.length,
+          replycount:replies.length,
         };
        })
        res.json(threadsToReturn);
-       console.log(threadsToReturn);
      }
     })
     
@@ -232,7 +231,7 @@ module.exports = function (app) {
                 text:thread.text,
                 created_on:thread.created_on,
                 bumped_on:thread.bumped_on,
-                replies:repliesToReturn
+                replies:repliesToReturn.reverse()
               };
               res.json(threadToReturn);
              }
