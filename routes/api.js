@@ -64,26 +64,36 @@ module.exports = function (app) {
        console.log("this thread does not exist"); 
      }
      else {
-       const threads=data.threads.map(thread=> {
+      if(data.threads.lenght>10) {
+        var threads=data.threads.slice(0,10);
+        
+      }
+      else {
+        var threads=data.threads;
+      }
+       const threadsToReturn=threads.map(thread=> {
+        if(thread.replies.length>3) {
+          var repliesToReturn=thread.replies.slice(1,3);
+        }
+        else {
+          var repliesToReturn=thread.replies;
+        }
        const {
         _id,
         text,
         created_on,
         bumped_on,
-        delete_password,
-        replies
         }=thread;
         return {
           _id,
           text,
           created_on,
           bumped_on,
-          delete_password,
-          replies,
-          replyCount:thread.replies.length,
+          repliesToReturn,
+          replyCount:repliesToReturn.length,
         };
        })
-       res.json(threads);
+       res.json(threadsToReturn);
      }
     })
     
